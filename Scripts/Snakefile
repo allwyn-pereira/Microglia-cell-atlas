@@ -1,0 +1,72 @@
+rule target:
+    input:
+        '/SCRATCH-BIRD/users/pereira-a-1/Voigt_et_al_HMG_2022/data/Voigt_et_al_HMG_2022_merged_Seurat_object.RDS',
+        '/SCRATCH-BIRD/users/pereira-a-1/Voigt_et_al_HMG_2022/data/Voigt_et_al_HMG_2022_integrated_Seurat_object.RDS',
+        '/SCRATCH-BIRD/users/pereira-a-1/Voigt_et_al_HMG_2022/results/Voigt_et_al_HMG_2022_VST_PCA.txt',
+        '/SCRATCH-BIRD/users/pereira-a-1/Voigt_et_al_HMG_2022/plots/UMAP_Voigt_et_al_HMG_2022_dim28_res0.5.pdf',
+        '/SCRATCH-BIRD/users/pereira-a-1/retina_atlas/data/CNS_integrated_dataset_UMAP.RDS',
+        '/SCRATCH-BIRD/users/pereira-a-1/retina_atlas/plots/CNS_integrated_dataset_UMAP_Tcell_markers.pdf',
+        '/SCRATCH-BIRD/users/pereira-a-1/retina_atlas/plots/CNS_integrated_dataset_UMAP_markers_dotplot.pdf'
+        
+rule unzip_dataset:
+    shell:
+        'tar -xf /SCRATCH-BIRD/users/pereira-a-1/Voigt_et_al_HMG_2022/unprocessed_data/GSE183320_RAW.tar -C /SCRATCH-BIRD/users/pereira-a-1/Voigt_et_al_HMG_2022/dataset'
+
+rule make_seurat_object:
+    output:
+        '/SCRATCH-BIRD/users/pereira-a-1/Voigt_et_al_HMG_2022/data/Voigt_et_al_HMG_2022_merged_Seurat_object.RDS'
+    conda:
+        '/SCRATCH-BIRD/users/pereira-a-1/Conda_environments/yaml_files/seurat4.yml'
+    shell:
+        'Rscript /SCRATCH-BIRD/users/pereira-a-1/Voigt_et_al_HMG_2022/scripts/Voigt_et_al_HMG_2022_Seurat_object_creation.R'
+
+rule make_integrated_seurat_object:
+    output:
+        '/SCRATCH-BIRD/users/pereira-a-1/Voigt_et_al_HMG_2022/data/Voigt_et_al_HMG_2022_integrated_Seurat_object.RDS'
+    conda:
+        '/SCRATCH-BIRD/users/pereira-a-1/Conda_environments/yaml_files/seurat4.yml'
+    shell:
+        'Rscript /SCRATCH-BIRD/users/pereira-a-1/Voigt_et_al_HMG_2022/scripts/Voigt_et_al_HMG_2022_integrated_Seurat_object_creation.R'
+
+rule make_seurat_exploration_plots:
+    output:
+        '/SCRATCH-BIRD/users/pereira-a-1/Voigt_et_al_HMG_2022/results/Voigt_et_al_HMG_2022_VST_PCA.txt'
+    conda:
+        '/SCRATCH-BIRD/users/pereira-a-1/Conda_environments/yaml_files/seurat4.yml'
+    shell:
+        'Rscript /SCRATCH-BIRD/users/pereira-a-1/Voigt_et_al_HMG_2022/scripts/Voigt_et_al_HMG_2022_Seurat_data_exploration.R'
+
+rule make_merged_seurat_object:
+    output:
+        '/SCRATCH-BIRD/users/pereira-a-1/Voigt_et_al_HMG_2022/plots/UMAP_Voigt_et_al_HMG_2022_dim28_res0.5.pdf'
+    conda: 
+        '/SCRATCH-BIRD/users/pereira-a-1/Conda_environments/yaml_files/seurat4.yml'
+    shell:
+        'Rscript /SCRATCH-BIRD/users/pereira-a-1/Voigt_et_al_HMG_2022/scripts/Voigt_et_al_HMG_2022_merged_Seurat_object_creation.R'
+
+rule make_CNS_integrated_seurat_object:
+    output:
+        '/SCRATCH-BIRD/users/pereira-a-1/retina_atlas/data/CNS_integrated_dataset_UMAP.RDS'
+    conda:
+        '/SCRATCH-BIRD/users/pereira-a-1/Conda_environments/yaml_files/seurat4.yml'
+    shell:
+        'Rscript /SCRATCH-BIRD/users/pereira-a-1/retina_atlas/scripts/Voigt_Lyu_Kumar_scRNA_data_integration_atlas.R'
+
+rule perform_cell_type_identification:
+    output:
+        '/SCRATCH-BIRD/users/pereira-a-1/retina_atlas/plots/CNS_integrated_dataset_UMAP_Tcell_markers.pdf'
+    conda:
+        '/SCRATCH-BIRD/users/pereira-a-1/Conda_environments/yaml_files/seurat4.yml'
+    shell:
+        'Rscript /SCRATCH-BIRD/users/pereira-a-1/retina_atlas/scripts/CNS_integrated_dataset_cell_type_exploration.r'
+
+rule perform_dotplot:
+    output:
+        '/SCRATCH-BIRD/users/pereira-a-1/retina_atlas/plots/CNS_integrated_dataset_UMAP_markers_dotplot.pdf'
+    conda:
+        '/SCRATCH-BIRD/users/pereira-a-1/Conda_environments/yaml_files/seurat4.yml'
+    shell:
+        'Rscript /SCRATCH-BIRD/users/pereira-a-1/retina_atlas/scripts/CNS_integrated_dataset_dotplot.R'
+        
+        
+
